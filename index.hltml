@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>步数输入</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            color: #333;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        button {
+            background-color: #007aff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0051a8;
+        }
+        .alert {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            z-index: 1000;
+        }
+        .alert.show {
+            display: block;
+        }
+        .alert .message {
+            margin-bottom: 10px;
+        }
+        .alert button {
+            background-color: #007aff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .alert button:hover {
+            background-color: #0051a8;
+        }
+    </style>
+</head>
+<body>
+<h1>步数输入</h1>
+<div>
+    <input type="number" id="stepInput" placeholder="输入步数" />
+    <button onclick="submitSteps()">确认</button>
+</div>
+
+<div id="alertBox" class="alert">
+    <div id="alertMessage" class="message"></div>
+    <button onclick="closeAlert()">确定</button>
+</div>
+
+<script>
+    function showAlert(message) {
+        document.getElementById('alertMessage').textContent = message;
+        document.getElementById('alertBox').classList.add('show');
+    }
+
+    function closeAlert() {
+        document.getElementById('alertBox').classList.remove('show');
+    }
+
+    function submitSteps() {
+        const steps = document.getElementById('stepInput').value;
+        if (!steps) {
+            showAlert('请先输入步数');
+            return;
+        }
+
+        const requestBody = new URLSearchParams({
+            'phone': 'jinjingsu09@gmail.com',
+            'pwd': 'z12345678',
+            'num': steps
+        });
+
+        console.log('发送的请求数据：', requestBody.toString());
+
+        fetch('https://api.faithxy.com/motion/api/motion/Xiaomi', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'Accept': '*/*',
+                'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,zh-TW;q=0.6,ja-JP;q=0.5,ja;q=0.4',
+                'Connection': 'keep-alive',
+                'Sec-Fetch-Dest': 'empty',
+                'Sec-Fetch-Mode': 'cors',
+                'Sec-Fetch-Site': 'cross-site'
+            },
+            body: requestBody
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('请求返回：', data);
+                showAlert('请求成功 😄,' + steps + '步');
+            })
+            .catch(error => {
+                showAlert('请求失败：' + error);
+            });
+    }
+</script>
+
+</body>
+</html>
