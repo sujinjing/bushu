@@ -1,8 +1,3 @@
-<!--
-  KeyShotXR
-  (c) Copyright 2012-2017 Luxion ApS - All Rights Reserved.
--->
-
 <!DOCTYPE html>
 <html xmlns='http://www.w3.org/1999/xhtml'>
 <head>
@@ -11,7 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>KeyShotXR</title>
     <style type="text/css">
-        body { -ms-touch-action: none; }
+        body { -ms-touch-action: none; margin: 0; padding: 0; }
+        #KeyShotXR {
+            width: 100%;
+            height: auto;
+            max-width: 100vw;
+            max-height: 100vh;
+            overflow: hidden;
+        }
     </style>
     <script type="text/javascript" src="11.43/files/KeyShotXR.js"></script>
     <script type="text/javascript">
@@ -20,8 +22,11 @@
         function initKeyShotXR() {
             var nameOfDiv = "KeyShotXR";
             var folderName = "11.43";
-            var viewPortWidth = 1548;
-            var viewPortHeight = 871;
+
+            // Set the viewPortWidth and viewPortHeight to be responsive
+            var viewPortWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            var viewPortHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+
             var backgroundColor = "#FFFFFF";
             var uCount = 18;
             var vCount = 9;
@@ -46,10 +51,11 @@
             var hotspots = {};
             var isIBooksWidget = false;
 
-            keyshotXR = new keyshotXR(nameOfDiv,folderName,viewPortWidth,viewPortHeight,backgroundColor,uCount,vCount,uWrap,vWrap,uMouseSensitivity,vMouseSensitivity,uStartIndex,vStartIndex,minZoom,maxZoom,rotationDamping,downScaleToBrowser,addDownScaleGUIButton,downloadOnInteraction,imageExtension,showLoading,loadingIcon,allowFullscreen,uReverse,vReverse,hotspots,isIBooksWidget);
+            keyshotXR = new keyshotXR(nameOfDiv, folderName, viewPortWidth, viewPortHeight, backgroundColor, uCount, vCount, uWrap, vWrap, uMouseSensitivity, vMouseSensitivity, uStartIndex, vStartIndex, minZoom, maxZoom, rotationDamping, downScaleToBrowser, addDownScaleGUIButton, downloadOnInteraction, imageExtension, showLoading, loadingIcon, allowFullscreen, uReverse, vReverse, hotspots, isIBooksWidget);
         }
 
         window.onload = initKeyShotXR;
+        window.onresize = initKeyShotXR;  // Reinitialize when window is resized
     </script>
 </head>
 <body oncontextmenu="return false;">
