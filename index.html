@@ -6,13 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>KeyShotXR</title>
     <style type="text/css">
-        body { -ms-touch-action: none; margin: 0; padding: 0; }
-        #KeyShotXR {
-            width: 100%;
-            height: auto;
-            max-width: 100vw;
-            max-height: 100vh;
+        body {
+            -ms-touch-action: none;
+            margin: 0;
+            padding: 0;
             overflow: hidden;
+        }
+        #KeyShotXR {
+            width: 100vw;  /* Full viewport width */
+            height: 100vh; /* Full viewport height */
+            overflow: hidden;
+            display: block;
         }
     </style>
     <script type="text/javascript" src="11.43/files/KeyShotXR.js"></script>
@@ -23,9 +27,10 @@
             var nameOfDiv = "KeyShotXR";
             var folderName = "11.43";
 
-            // Set the viewPortWidth and viewPortHeight to be responsive
-            var viewPortWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-            var viewPortHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+            // Use devicePixelRatio to adjust resolution on high-DPI devices like mobile phones
+            var pixelRatio = window.devicePixelRatio || 1;
+            var viewPortWidth = window.innerWidth * pixelRatio;
+            var viewPortHeight = window.innerHeight * pixelRatio;
 
             var backgroundColor = "#FFFFFF";
             var uCount = 18;
