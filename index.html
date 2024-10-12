@@ -1,69 +1,131 @@
 <!DOCTYPE html>
-<html xmlns='http://www.w3.org/1999/xhtml'>
+<html lang="zh">
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>KeyShotXR</title>
-    <style type="text/css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>步数输入</title>
+    <style>
         body {
-            -ms-touch-action: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+            background-color: #f0f0f0;
         }
-        #KeyShotXR {
-            width: 100vw;  /* Full viewport width */
-            height: 100vh; /* Full viewport height */
-            overflow: hidden;
+        h1 {
+            color: #333;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+        button {
+            background-color: #007aff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0051a8;
+        }
+        .alert {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            z-index: 1000;
+        }
+        .alert.show {
             display: block;
         }
+        .alert .message {
+            margin-bottom: 10px;
+        }
+        .alert button {
+            background-color: #007aff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .alert button:hover {
+            background-color: #0051a8;
+        }
     </style>
-    <script type="text/javascript" src="11.43/files/KeyShotXR.js"></script>
-    <script type="text/javascript">
-        var keyshotXR;
+</head>
+<body>
+<h1>步数输入</h1>
+<div>
+    <input type="number" id="stepInput" placeholder="输入步数" />
+    <button onclick="submitSteps()">确认</button>
+</div>
 
-        function initKeyShotXR() {
-            var nameOfDiv = "KeyShotXR";
-            var folderName = "11.43";
+<div id="alertBox" class="alert">
+    <div id="alertMessage" class="message"></div>
+    <button onclick="closeAlert()">确定</button>
+</div>
 
-            // Use devicePixelRatio to adjust resolution on high-DPI devices like mobile phones
-            var pixelRatio = window.devicePixelRatio || 1;
-            var viewPortWidth = window.innerWidth * pixelRatio;
-            var viewPortHeight = window.innerHeight * pixelRatio;
+<script>
+    function showAlert(message) {
+        document.getElementById('alertMessage').textContent = message;
+        document.getElementById('alertBox').classList.add('show');
+    }
 
-            var backgroundColor = "#FFFFFF";
-            var uCount = 18;
-            var vCount = 9;
-            var uWrap = true;
-            var vWrap = false;
-            var uMouseSensitivity = -0.05;
-            var vMouseSensitivity = 0.05625;
-            var uStartIndex = 9;
-            var vStartIndex = 6;
-            var minZoom = 1;
-            var maxZoom = 1;
-            var rotationDamping = 0.96;
-            var downScaleToBrowser = true;
-            var addDownScaleGUIButton = false;
-            var downloadOnInteraction = false;
-            var imageExtension = "png";
-            var showLoading = true;
-            var loadingIcon = "ks_logo.png"; // Set to empty string for default icon.
-            var allowFullscreen = true; // Double-click in desktop browsers for fullscreen.
-            var uReverse = false;
-            var vReverse = false;
-            var hotspots = {};
-            var isIBooksWidget = false;
+    function closeAlert() {
+        document.getElementById('alertBox').classList.remove('show');
+    }
 
-            keyshotXR = new keyshotXR(nameOfDiv, folderName, viewPortWidth, viewPortHeight, backgroundColor, uCount, vCount, uWrap, vWrap, uMouseSensitivity, vMouseSensitivity, uStartIndex, vStartIndex, minZoom, maxZoom, rotationDamping, downScaleToBrowser, addDownScaleGUIButton, downloadOnInteraction, imageExtension, showLoading, loadingIcon, allowFullscreen, uReverse, vReverse, hotspots, isIBooksWidget);
+    function submitSteps() {
+        const steps = document.getElementById('stepInput').value;
+        if (!steps) {
+            showAlert('请先输入步数');
+            return;
         }
 
-        window.onload = initKeyShotXR;
-        window.onresize = initKeyShotXR;  // Reinitialize when window is resized
-    </script>
-</head>
-<body oncontextmenu="return false;">
-<div id="KeyShotXR"></div>
+        const requestBody = new URLSearchParams({
+            'phone': 'jinjingsu09@gmail.com',
+            'pwd': 'z12345678',
+            'num': steps
+        });
+
+        console.log('发送的请求数据：', requestBody.toString());
+
+        fetch('https://api.faithxy.com/motion/api/motion/Xiaomi', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'Accept': '*/*',
+                'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,zh-TW;q=0.6,ja-JP;q=0.5,ja;q=0.4',
+                'Connection': 'keep-alive',
+                'Sec-Fetch-Dest': 'empty',
+                'Sec-Fetch-Mode': 'cors',
+                'Sec-Fetch-Site': 'cross-site'
+            },
+            body: requestBody
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('请求返回：', data);
+                showAlert('请求成功 😄,' + steps + '步');
+            })
+            .catch(error => {
+                showAlert('请求失败：' + error);
+            });
+    }
+</script>
+
 </body>
 </html>
